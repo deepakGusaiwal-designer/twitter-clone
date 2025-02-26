@@ -11,12 +11,7 @@ function Feed() {
   useEffect(() => {
     const q = query(collection(db, 'posts'), orderBy('timestamp', 'desc'));
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      setPosts(
-        snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }))
-      );
+      setPosts(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
     });
     return () => unsubscribe();
   }, []);
@@ -39,6 +34,8 @@ function Feed() {
             retweets={post.retweets}
             likedBy={post.likedBy}
             retweetedBy={post.retweetedBy}
+            imageUrl={post.imageUrl}
+            videoUrl={post.videoUrl}
           />
         ))}
       </div>

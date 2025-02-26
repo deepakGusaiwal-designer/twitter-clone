@@ -1,6 +1,8 @@
+// src/components/Auth/Register.js
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { auth } from '../../firebase/firebase';
+import { auth, db } from '../../firebase/firebase';
+import { doc, setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 
 function Register() {
@@ -18,18 +20,22 @@ function Register() {
       return;
     }
     try {
-      console.log('Attempting to register with:', { email, password, username });
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      console.log('User created:', userCredential.user);
-      await updateProfile(userCredential.user, { displayName: username });
-      console.log('Profile updated with username:', username);
+      const user = userCredential.user;
+      await updateProfile(user, { displayName: username });
+      await setDoc(doc(db, 'users', user.uid), {
+        username,
+        email,
+        followers: [],
+        following: [],
+      }, { merge: true }); // Use merge to avoid overwriting if document exists
       navigate('/');
     } catch (err) {
-      console.error('Registration error:', err);
       setError(err.message);
     }
   };
 
+  // ... rest of the component (form UI) remains unchanged
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">

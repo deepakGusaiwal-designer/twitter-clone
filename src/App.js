@@ -11,7 +11,8 @@ import PrivateRoute from './components/PrivateRoute';
 function App() {
   return (
     <Router>
-      <div className="max-w-[1300px] mx-auto flex">
+      {/* <div className="max-w-[1300px] mx-auto flex"> */}
+      <div className="appMain">
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

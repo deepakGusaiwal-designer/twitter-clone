@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, User, Bell, Mail, PenSquare, LogOut } from 'lucide-react';
+import { Home, User, Bell, Mail, LogOut } from 'lucide-react';
 import { auth } from '../../firebase/firebase';
 import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';

@@ -58,12 +58,60 @@ function TweetBox() {
   return (
     <div className="p-4 border-b">
       <form onSubmit={sendTweet} className="space-y-4">
-        <input
+
+      <form onSubmit={sendTweet} className="space-y-4">
+        <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+            <div className="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
+                <label for="comment" className="sr-only">What's in your mind</label>
+                <textarea 
+                  id="comment" 
+                  value={tweetMessage}
+                  onChange={(e) => setTweetMessage(e.target.value)}
+                  placeholder="What's happening?"
+                  className="block h-10 w-full rounded-xl bg-white px-5 py-3 text-base text-gray-900 outline-2 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset focus:outline-indigo-600 sm:text-sm/6 border border-gray-300 focus:border-indigo-600 resize-none">
+                  </textarea>
+            </div>
+            <div className="flex items-center justify-end px-3 py-2 border-t dark:border-gray-600 border-gray-200">
+
+            <label className="flex items-center gap-2 text-blue-500 cursor-pointer">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setImageFile(e.target.files[0])}
+                  className="hidden"
+                />
+                <span className="inline-flex justify-center items-center p-2 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
+                  <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                          <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z"/>
+                      </svg>
+                  </span>
+              </label>
+              
+                {/* <div className="flex ps-0 space-x-1 rtl:space-x-reverse sm:ps-2">
+                    <button type="button" className="inline-flex justify-center items-center p-2 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
+                        <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                              <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z"/>
+                          </svg>
+                        <span className="sr-only">Upload image</span>
+                    </button>
+                </div> */}
+                <button 
+                type="submit"
+                disabled={!tweetMessage && !imageFile} 
+                className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
+                    Post comment
+                </button>
+            </div>
+        </div>
+      </form>
+      {/* <p className="ms-auto text-xs text-gray-500 dark:text-gray-400">Remember, contributions to this topic should follow our <a href="#" className="text-blue-600 dark:text-blue-500 hover:underline">Community Guidelines</a>.</p> */}
+
+        {/* <textarea
+          rows='5'
           value={tweetMessage}
           onChange={(e) => setTweetMessage(e.target.value)}
           placeholder="What's happening?"
-          className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+          className="block h-10 w-full rounded-xl bg-white px-5 py-3 text-base text-gray-900 outline-2 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset focus:outline-indigo-600 sm:text-sm/6 border border-gray-300 focus:border-indigo-600 resize-none"></textarea>
         <div className="flex gap-4">
           <label className="flex items-center gap-2 text-blue-500 cursor-pointer">
             <input
@@ -78,14 +126,14 @@ function TweetBox() {
         {imageFile && <p className="text-sm text-gray-500">Image selected: {imageFile.name}</p>}
         {error && <p className="text-red-500 text-sm">{error}</p>}
         <div className="flex justify-end">
-          <button
-            type="submit"
-            disabled={!tweetMessage && !imageFile}
-            className="bg-blue-500 text-white px-4 py-2 rounded disabled:bg-gray-400 hover:bg-blue-600"
-          >
-            Tweet
-          </button>
-        </div>
+            <button
+              type="submit"
+              disabled={!tweetMessage && !imageFile}
+              className="bg-blue-500 text-white px-4 py-2 rounded disabled:bg-gray-400 hover:bg-blue-600"
+            >
+              Tweet
+            </button>
+          </div> */}
       </form>
     </div>
   );

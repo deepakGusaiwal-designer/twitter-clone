@@ -106,7 +106,7 @@ function Widgets() {
         <div className="p-4 border-b border-gray-200">
           <h3 className="text-lg font-bold">Who to follow</h3>
         </div>
-        <div className="p-4 space-y-4">
+        {/* <div className="p-4 space-y-4">
           {suggestedUsers.map((user) => {
             const isFollowing = following.includes(user.id);
             return (
@@ -131,13 +131,13 @@ function Widgets() {
               </div>
             );
           })}
-        </div>
+        </div> */}
       </div>
       <div className="border border-gray-200 rounded-lg bg-white">
         <div className="p-4 border-b border-gray-200">
           <h3 className="text-lg font-bold">Members</h3>
         </div>
-        <div className="p-4 space-y-4 max-h-64 overflow-y-auto">
+        {/* <div className="p-4 space-y-4 max-h-64 overflow-y-auto">
           {allMembers.map((user) => {
             const isFollowing = following.includes(user.id);
             return (
@@ -162,7 +162,7 @@ function Widgets() {
               </div>
             );
           })}
-        </div>
+        </div> */}
       </div>
     </div>
   );

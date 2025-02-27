@@ -22,7 +22,7 @@ function Feed() {
         <h2 className="text-xl font-bold">Home</h2>
       </div>
       <TweetBox />
-      <div className="p-4">
+      {/* <div className="p-4">
         {posts.map((post) => (
           <Post
             key={post.id}
@@ -38,7 +38,7 @@ function Feed() {
             videoUrl={post.videoUrl}
           />
         ))}
-      </div>
+      </div> */}
     </div>
   );
 }

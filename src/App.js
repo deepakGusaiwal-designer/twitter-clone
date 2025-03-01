@@ -7,7 +7,7 @@ import Widgets from './components/Widgets/Widgets';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import PrivateRoute from './components/PrivateRoute';
-
+import './App.css';
 function App() {
   return (
     <Router>
@@ -20,7 +20,7 @@ function App() {
             path="/"
             element={
               <PrivateRoute>
-                <div className="flex w-full">
+                <div className="app-grid-main">
                   <Sidebar />
                   <Feed />
                   <Widgets />

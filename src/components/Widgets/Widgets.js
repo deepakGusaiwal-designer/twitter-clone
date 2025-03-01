@@ -75,7 +75,7 @@ function Widgets() {
   };
 
   return (
-    <div className="w-80 hidden lg:block p-4 space-y-4">
+    <div className="w-80 lg:block p-4 space-y-4">
       <div className="relative">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500" />
         <input
@@ -102,11 +102,11 @@ function Widgets() {
           ))}
         </div>
       </div>
-      <div className="border border-gray-200 rounded-lg bg-white">
+      {/* <div className="border border-gray-200 rounded-lg bg-white">
         <div className="p-4 border-b border-gray-200">
           <h3 className="text-lg font-bold">Who to follow</h3>
         </div>
-        {/* <div className="p-4 space-y-4">
+        <div className="p-4 space-y-4">
           {suggestedUsers.map((user) => {
             const isFollowing = following.includes(user.id);
             return (
@@ -131,13 +131,13 @@ function Widgets() {
               </div>
             );
           })}
-        </div> */}
-      </div>
+        </div>
+      </div> */}
       <div className="border border-gray-200 rounded-lg bg-white">
         <div className="p-4 border-b border-gray-200">
           <h3 className="text-lg font-bold">Members</h3>
         </div>
-        {/* <div className="p-4 space-y-4 max-h-64 overflow-y-auto">
+        <div className="p-4 space-y-4 max-h-64 overflow-y-auto">
           {allMembers.map((user) => {
             const isFollowing = following.includes(user.id);
             return (
@@ -162,7 +162,7 @@ function Widgets() {
               </div>
             );
           })}
-        </div> */}
+        </div>
       </div>
     </div>
   );

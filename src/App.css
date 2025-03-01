@@ -1,0 +1,5 @@
+.app-grid-main {
+    display: flex;
+    max-width: 1199px;
+    margin: auto;
+}

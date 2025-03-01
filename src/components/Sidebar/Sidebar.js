@@ -5,6 +5,7 @@ import { auth } from '../../firebase/firebase';
 import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import Logo from "../../assets/sofice.svg"
 
 function Sidebar() {
   const [user] = useAuthState(auth);
@@ -21,8 +22,10 @@ function Sidebar() {
 
   return (
     <div className="w-64 h-screen sticky top-0 p-4 flex flex-col gap-4">
-      <div className="flex items-center justify-center h-12 w-12 rounded-full hover:bg-gray-100 cursor-pointer">
-        <span className="text-2xl font-bold text-blue-500">T</span>
+      <div className="px-1 flex items-center justify-center h-12 w-12 rounded-full hover:bg-gray-100  cursor-pointer">
+        <a href='/'>
+          <img src={Logo} alt='Logo' />
+        </a>
       </div>
       <nav className="flex flex-col gap-2">
         <a href="/" className="flex items-center gap-4 p-3 rounded-full hover:bg-gray-100 text-lg font-semibold text-gray-800">

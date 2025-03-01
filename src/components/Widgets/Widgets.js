@@ -102,7 +102,7 @@ function Widgets() {
           ))}
         </div>
       </div>
-      {/* <div className="border border-gray-200 rounded-lg bg-white">
+      <div className="border border-gray-200 rounded-lg bg-white">
         <div className="p-4 border-b border-gray-200">
           <h3 className="text-lg font-bold">Who to follow</h3>
         </div>
@@ -132,7 +132,7 @@ function Widgets() {
             );
           })}
         </div>
-      </div> */}
+      </div>
       <div className="border border-gray-200 rounded-lg bg-white">
         <div className="p-4 border-b border-gray-200">
           <h3 className="text-lg font-bold">Members</h3>

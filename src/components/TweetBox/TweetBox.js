@@ -21,6 +21,7 @@ async function uploadImage(file) {
 
 function TweetBox() {
   const [tweetMessage, setTweetMessage] = useState('');
+  // eslint-disable-next-line no-unused-vars
   const [imageFile, setImageFile] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const [error, setError] = useState('');
@@ -156,10 +157,10 @@ function TweetBox() {
               onChange={handleTweetChange}
               onSelect={onSelectHashtag}
               className="block w-full h-auto border-none"
-              placeholder="What's happening?"
-            >
+              >
               <textarea
                 className="block h-auto w-full rounded-xl bg-white px-5 py-3 text-base text-gray-900 outline-2 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset focus:outline-indigo-600 sm:text-sm/6 border border-gray-300 focus:border-indigo-600 resize-none"
+                placeholder="What's happening?"
               />
             </AutoComplete>
           </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebase/firebase';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Logo from "../../assets/sofice.svg"
 
 function Login() {
@@ -92,9 +92,9 @@ function Login() {
 
           <p className="mt-10 text-center text-sm/6 text-gray-500">
             Not a member?{' '}
-            <a href="/register" className="font-semibold text-cyan-800 hover:text-cyan-900">
+            <Link to="/register" className="font-semibold text-cyan-800 hover:text-cyan-900">
             Register
-            </a>
+            </Link>
           </p>
         </div>
       </div>

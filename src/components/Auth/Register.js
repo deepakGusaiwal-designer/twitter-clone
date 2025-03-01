@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth, db } from '../../firebase/firebase';
 import { doc, setDoc } from 'firebase/firestore';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Logo from "../../assets/sofice.svg"
 
 function Register() {
@@ -128,9 +128,9 @@ function Register() {
 
         <p className="mt-10 text-center text-sm/6 text-gray-500">
           Already have an account?{' '}
-          <a href="/login" className="font-semibold text-cyan-800 hover:text-cyan-900">
+          <Link to="/login" className="font-semibold text-cyan-800 hover:text-cyan-900">
           Login
-          </a>
+          </Link>
         </p>
       </div>
     </div>

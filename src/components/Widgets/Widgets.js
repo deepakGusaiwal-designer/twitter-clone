@@ -2,12 +2,14 @@
 import React, { useState, useEffect } from 'react';
 import { Search, TrendingUp } from 'lucide-react';
 import { auth, db } from '../../firebase/firebase';
-import { collection, getDocs, doc, setDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { collection, getDocs, doc, updateDoc, arrayUnion, arrayRemove, setDoc, query, orderBy, limit, onSnapshot } from 'firebase/firestore';
+import { Link } from 'react-router-dom';
 
 function Widgets() {
   const [suggestedUsers, setSuggestedUsers] = useState([]);
   const [allMembers, setAllMembers] = useState([]);
   const [following, setFollowing] = useState([]);
+  const [trendingHashtags, setTrendingHashtags] = useState([]);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -27,7 +29,22 @@ function Widgets() {
         }, { merge: true });
       }
     };
+
+    const fetchTrendingHashtags = () => {
+      const q = query(collection(db, 'hashtags'), orderBy('count', 'desc'), limit(5));
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        const hashtags = snapshot.docs.map((doc) => ({
+          hashtag: doc.id,
+          count: doc.data().count,
+        }));
+        setTrendingHashtags(hashtags);
+      });
+      return unsubscribe;
+    };
+
     if (auth.currentUser) fetchUsers();
+    const unsubscribe = fetchTrendingHashtags();
+    return () => unsubscribe();
   }, []);
 
   const handleFollow = async (userId, isFollowing) => {
@@ -59,12 +76,10 @@ function Widgets() {
       }
 
       if (isFollowing) {
-        console.log(`Unfollowing ${userId}`);
         await updateDoc(currentUserRef, { following: arrayRemove(userId) });
         await updateDoc(targetUserRef, { followers: arrayRemove(auth.currentUser.uid) });
         setFollowing(following.filter((id) => id !== userId));
       } else {
-        console.log(`Following ${userId}`);
         await updateDoc(currentUserRef, { following: arrayUnion(userId) });
         await updateDoc(targetUserRef, { followers: arrayUnion(auth.currentUser.uid) });
         setFollowing([...following, userId]);
@@ -75,7 +90,7 @@ function Widgets() {
   };
 
   return (
-    <div className="w-80 lg:block p-4 space-y-4">
+    <div className="w-80 hidden lg:block p-4 space-y-4">
       <div className="relative">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500" />
         <input
@@ -91,13 +106,12 @@ function Widgets() {
           </h3>
         </div>
         <div className="p-4 space-y-4">
-          {[{ topic: 'ReactJS', posts: '120K' }, { topic: 'ShadcnUI', posts: '85K' }, { topic: 'TailwindCSS', posts: '95K' }].map((trend, index) => (
+          {trendingHashtags.map((trend, index) => (
             <div key={index} className="flex justify-between items-center">
-              <div>
-                <p className="font-semibold">{trend.topic}</p>
-                <p className="text-sm text-gray-500">{trend.posts} posts</p>
-              </div>
-              <button className="text-blue-500 hover:underline text-sm">Follow</button>
+              <Link to={`/hashtag/${trend.hashtag.slice(1)}`} className="font-semibold text-blue-500 hover:underline">
+                {trend.hashtag}
+              </Link>
+              <p className="text-sm text-gray-500">{trend.count} posts</p>
             </div>
           ))}
         </div>
@@ -131,6 +145,21 @@ function Widgets() {
               </div>
             );
           })}
+        </div>
+      </div>
+      <div className="border border-gray-200 rounded-lg bg-white">
+        <div className="p-4 border-b border-gray-200">
+          <h3 className="text-lg font-bold">Top Hashtags</h3>
+        </div>
+        <div className="p-4 space-y-4">
+          {trendingHashtags.map((trend, index) => (
+            <div key={index} className="flex justify-between items-center">
+              <Link to={`/hashtag/${trend.hashtag.slice(1)}`} className="font-semibold text-blue-500 hover:underline">
+                {trend.hashtag}
+              </Link>
+              <p className="text-sm text-gray-500">{trend.count} uses</p>
+            </div>
+          ))}
         </div>
       </div>
       <div className="border border-gray-200 rounded-lg bg-white">

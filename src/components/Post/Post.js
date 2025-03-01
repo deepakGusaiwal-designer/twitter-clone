@@ -4,6 +4,7 @@ import { Heart, Repeat, MoreHorizontal, MessageSquare } from 'lucide-react';
 import { doc, updateDoc, arrayUnion, arrayRemove, collection, addDoc, onSnapshot, deleteDoc } from 'firebase/firestore';
 import { auth, db } from '../../firebase/firebase';
 import { Dropdown } from 'antd';
+import { Link } from 'react-router-dom';
 
 function Post({ id, username, text, timestamp, likes, retweets, likedBy, retweetedBy, imageUrl, edited, userId }) {
   const [localLikes, setLocalLikes] = useState(likes || 0);
@@ -14,7 +15,7 @@ function Post({ id, username, text, timestamp, likes, retweets, likedBy, retweet
   const [comments, setComments] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(text);
-  const [showCommentBox, setShowCommentBox] = useState(false); // New state for comment box visibility
+  const [showCommentBox, setShowCommentBox] = useState(false);
 
   useEffect(() => {
     const commentsRef = collection(db, 'posts', id, 'comments');
@@ -106,6 +107,30 @@ function Post({ id, username, text, timestamp, likes, retweets, likedBy, retweet
 
   const isOwner = auth.currentUser && auth.currentUser.uid === userId;
 
+  // Render text with clickable hashtags
+  const renderTextWithHashtags = (text) => {
+    const hashtagRegex = /#[\w]+/g;
+    const parts = text.split(hashtagRegex);
+    const hashtags = text.match(hashtagRegex) || [];
+    let result = [];
+    parts.forEach((part, index) => {
+      result.push(<span key={`part-${index}`}>{part}</span>);
+      if (hashtags[index]) {
+        const hashtag = hashtags[index];
+        result.push(
+          <Link
+            key={`hashtag-${index}`}
+            to={`/hashtag/${hashtag.slice(1)}`}
+            className="text-blue-500 underline hover:text-blue-700"
+          >
+            {hashtag}
+          </Link>
+        );
+      }
+    });
+    return result;
+  };
+
   return (
     <div className="flex p-4 border-b relative">
       <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-white text-xl font-bold mr-4">
@@ -121,9 +146,9 @@ function Post({ id, username, text, timestamp, likes, retweets, likedBy, retweet
           {isOwner && (
             <div className="ml-auto">
               <Dropdown menu={{ items }} trigger={['click']}>
-                <button className="text-gray-500 hover:text-gray-700">
+                <a onClick={(e) => e.preventDefault()} className="text-gray-500 hover:text-gray-700">
                   <MoreHorizontal className="w-5 h-5" />
-                </button>
+                </a>
               </Dropdown>
             </div>
           )}
@@ -149,7 +174,7 @@ function Post({ id, username, text, timestamp, likes, retweets, likedBy, retweet
           </form>
         ) : (
           <>
-            <p>{text}</p>
+            <p>{renderTextWithHashtags(text)}</p>
             {imageUrl && <img src={imageUrl} alt="Tweet" className="mt-2 max-w-full h-auto rounded-lg" />}
           </>
         )}
@@ -201,7 +226,7 @@ function Post({ id, username, text, timestamp, likes, retweets, likedBy, retweet
               </div>
               <div>
                 <p className="font-semibold text-sm">{c.username}</p>
-                <p className="text-sm">{c.text}</p>
+                <p className="text-sm">{renderTextWithHashtags(c.text)}</p>
               </div>
             </div>
           ))}

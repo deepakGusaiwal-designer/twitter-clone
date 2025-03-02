@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { collection, addDoc, serverTimestamp, doc, setDoc, increment, query, orderBy, limit, getDocs } from 'firebase/firestore';
 import { auth, db } from '../../firebase/firebase';
-import { UploadOutlined, SmileOutlined, DeleteOutlined } from '@ant-design/icons';
+import {DeleteOutlined } from '@ant-design/icons';
+import { ImageUp, Smile } from 'lucide-react';
 import { Button, Popover, AutoComplete } from 'antd';
 import Picker from 'emoji-picker-react';
 
@@ -19,7 +20,7 @@ async function uploadImage(file) {
   return data.secure_url;
 }
 
-function TweetBox() {
+function TweetBox({ onTweetPosted }) {
   const [tweetMessage, setTweetMessage] = useState('');
   // eslint-disable-next-line no-unused-vars
   const [imageFile, setImageFile] = useState(null);
@@ -89,14 +90,12 @@ function TweetBox() {
 
   const handleTweetChange = (value) => {
     setTweetMessage(value);
-    console.log('Tweet Message:', value);
     const lastWord = value.split(' ').pop();
     if (lastWord.startsWith('#')) {
       const prefix = lastWord.slice(1).toLowerCase();
       const filteredOptions = trendingHashtags
         .filter((ht) => ht.value.toLowerCase().startsWith(prefix))
         .map((ht) => ({ value: ht.value, label: ht.value }));
-      console.log('Hashtag Options:', filteredOptions);
       setHashtagOptions(filteredOptions.length > 0 ? filteredOptions : trendingHashtags);
     } else {
       setHashtagOptions([]);
@@ -129,7 +128,7 @@ function TweetBox() {
         retweetedBy: [],
         imageUrl: imageUrl || null,
         edited: false,
-        hashtags: hashtags.map((ht) => ht.toLowerCase()), // Store hashtags in an array
+        hashtags: hashtags.map((ht) => ht.toLowerCase()),
       });
 
       if (hashtags.length > 0) {
@@ -141,13 +140,14 @@ function TweetBox() {
       setImageUrl(null);
       setError('');
       setHashtagOptions([]);
+      if (onTweetPosted) onTweetPosted(); // Close modal after posting
     } catch (err) {
       setError('Failed to post tweet: ' + err.message);
     }
   };
 
   return (
-    <div className="p-4 border-b">
+    <div className="p-4">
       <form onSubmit={sendTweet} className="space-y-4">
         <div className="w-full mb-4 rounded-lg dark:bg-gray-700">
           <div className="bg-white rounded-t-lg dark:bg-gray-800">
@@ -157,10 +157,10 @@ function TweetBox() {
               onChange={handleTweetChange}
               onSelect={onSelectHashtag}
               className="block w-full h-auto border-none"
-              >
+              placeholder="What's happening?"
+            >
               <textarea
                 className="block h-auto w-full rounded-xl bg-white px-5 py-3 text-base text-gray-900 outline-2 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset focus:outline-indigo-600 sm:text-sm/6 border border-gray-300 focus:border-indigo-600 resize-none"
-                placeholder="What's happening?"
               />
             </AutoComplete>
           </div>
@@ -174,7 +174,7 @@ function TweetBox() {
                   className="hidden"
                 />
                 <span className="inline-flex justify-center items-center p-2 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
-                  <UploadOutlined style={{ fontSize: '16px' }} />
+                  <ImageUp style={{ fontSize: '16px' }} />
                 </span>
               </label>
               <Popover
@@ -184,7 +184,7 @@ function TweetBox() {
                 onOpenChange={(open) => setShowEmojiPicker(open)}
               >
                 <span className="inline-flex justify-center items-center p-2 text-gray-500 rounded-sm cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
-                  <SmileOutlined style={{ fontSize: '16px' }} />
+                  <Smile  style={{ fontSize: '16px' }} />
                 </span>
               </Popover>
             </div>

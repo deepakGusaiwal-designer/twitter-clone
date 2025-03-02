@@ -132,14 +132,14 @@ function Post({ id, username, text, timestamp, likes, retweets, likedBy, retweet
   };
 
   return (
-    <div className="flex p-4 border-b relative">
+    <div className="flex p-3 border-b relative">
       <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-white text-xl font-bold mr-4">
         {username?.charAt(0).toUpperCase() || 'U'}
       </div>
       <div className="flex-1">
         <div className="flex items-center gap-2">
           <h3 className="font-semibold">{username}</h3>
-          <p className="text-sm text-gray-500">
+          <p className="text-xs text-gray-500">
             {timestamp && new Date(timestamp.toDate()).toLocaleString()}
             {edited && <span className="ml-2 text-xs text-gray-400">(Edited)</span>}
           </p>

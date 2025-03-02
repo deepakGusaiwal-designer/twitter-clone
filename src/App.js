@@ -16,7 +16,7 @@ function App() {
         // Seed Token
         fontFamily: 'inherit',
         colorPrimary: '#00b96b',
-        borderRadius: 2,
+        borderRadius: 8,
 
         // Alias Token
         colorBgContainer: '#f6ffed',

@@ -7,6 +7,7 @@ import Widgets from './components/Widgets/Widgets';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import PrivateRoute from './components/PrivateRoute';
+import ChatBox from './components/ChatBox/ChatBox';
 import './App.css';
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
                   <Sidebar />
                   <Feed />
                   <Widgets />
+                  <ChatBox />
                 </div>
               </PrivateRoute>
             }
@@ -49,6 +51,7 @@ function App() {
                   <Sidebar />
                   <Feed />
                   <Widgets />
+                  <ChatBox />
                 </div>
               </PrivateRoute>
             }

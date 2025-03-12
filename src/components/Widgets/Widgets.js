@@ -1,4 +1,4 @@
-// src/components/Widgets/Widgets.js
+// src/components/Widgets/Widgets.js (unchanged from your last version, just for reference)
 import React, { useState, useEffect } from 'react';
 import { Search, TrendingUp } from 'lucide-react';
 import { auth, db } from '../../firebase/firebase';
@@ -13,20 +13,25 @@ function Widgets() {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const usersSnapshot = await getDocs(collection(db, 'users'));
-      const allUsers = usersSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-      const otherUsers = allUsers.filter((u) => u.id !== auth.currentUser?.uid);
-      setSuggestedUsers(otherUsers.slice(0, 2));
-      setAllMembers(otherUsers);
-      const currentUserDoc = allUsers.find((u) => u.id === auth.currentUser?.uid);
-      setFollowing(currentUserDoc?.following || []);
-      if (!currentUserDoc && auth.currentUser) {
-        await setDoc(doc(db, 'users', auth.currentUser.uid), {
-          username: auth.currentUser.displayName || 'Unknown',
-          email: auth.currentUser.email || '',
-          followers: [],
-          following: [],
-        }, { merge: true });
+      try {
+        const usersSnapshot = await getDocs(collection(db, 'users'));
+        const allUsers = usersSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        const otherUsers = allUsers.filter((u) => u.id !== auth.currentUser?.uid);
+        setSuggestedUsers(otherUsers.slice(0, 2));
+        setAllMembers(otherUsers);
+        const currentUserDoc = allUsers.find((u) => u.id === auth.currentUser?.uid);
+        setFollowing(currentUserDoc?.following || []);
+        if (!currentUserDoc && auth.currentUser) {
+          await setDoc(doc(db, 'users', auth.currentUser.uid), {
+            username: auth.currentUser.displayName || 'Unknown',
+            email: auth.currentUser.email || '',
+            followers: [],
+            following: [],
+          }, { merge: true });
+          setFollowing([]);
+        }
+      } catch (error) {
+        console.error('Error fetching users:', error);
       }
     };
 
@@ -38,6 +43,8 @@ function Widgets() {
           count: doc.data().count,
         }));
         setTrendingHashtags(hashtags);
+      }, (error) => {
+        console.error('Error fetching trending hashtags:', error);
       });
       return unsubscribe;
     };
@@ -48,7 +55,10 @@ function Widgets() {
   }, []);
 
   const handleFollow = async (userId, isFollowing) => {
-    if (!auth.currentUser) return;
+    if (!auth.currentUser) {
+      console.log('No authenticated user');
+      return;
+    }
     const currentUserRef = doc(db, 'users', auth.currentUser.uid);
     const targetUserRef = doc(db, 'users', userId);
 
@@ -79,13 +89,15 @@ function Widgets() {
         await updateDoc(currentUserRef, { following: arrayRemove(userId) });
         await updateDoc(targetUserRef, { followers: arrayRemove(auth.currentUser.uid) });
         setFollowing(following.filter((id) => id !== userId));
+        console.log(`Unfollowed user ${userId}`);
       } else {
         await updateDoc(currentUserRef, { following: arrayUnion(userId) });
         await updateDoc(targetUserRef, { followers: arrayUnion(auth.currentUser.uid) });
         setFollowing([...following, userId]);
+        console.log(`Followed user ${userId}`);
       }
     } catch (err) {
-      console.error('Follow error:', err);
+      console.error('Follow error:', err.code, err.message);
     }
   };
 
